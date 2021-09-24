@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TccApplication {
+public class TCCApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TccApplication.class, args);
+		SpringApplication.run(TCCApplication.class, args);
 	}
 
 }

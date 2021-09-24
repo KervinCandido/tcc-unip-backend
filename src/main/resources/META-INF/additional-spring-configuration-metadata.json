@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "tcc.jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'tcc.jwt.secret'"
+  },
+  {
+    "name": "tcc.jwt.expiration",
+    "type": "java.lang.Long",
+    "description": "A description for 'tcc.jwt.expiration'"
+  }
+]}
