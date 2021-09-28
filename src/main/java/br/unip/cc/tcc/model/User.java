@@ -3,6 +3,7 @@ package br.unip.cc.tcc.model;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -115,5 +116,22 @@ public class User implements UserDetails {
 		return "User [id=" + id + ", userOpenFire=" + userOpenFire + ", permissions=" + permissions + ", exclusionDate="
 				+ exclusionDate + "]";
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(exclusionDate, id, permissions, userOpenFire);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(exclusionDate, other.exclusionDate) && Objects.equals(id, other.id)
+				&& Objects.equals(permissions, other.permissions) && Objects.equals(userOpenFire, other.userOpenFire);
+	}
 }

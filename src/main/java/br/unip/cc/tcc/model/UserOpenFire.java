@@ -1,6 +1,7 @@
 package br.unip.cc.tcc.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -33,7 +34,7 @@ public class UserOpenFire {
 
 	@Column(name = "modificationdate", nullable = false)
 	@Convert(converter = LocalDateTimeOpenFireConverter.class)
-	private LocalDateTime modificationDat;
+	private LocalDateTime modificationDate;
 
 	public String getUserName() {
 		return userName;
@@ -68,11 +69,11 @@ public class UserOpenFire {
 	}
 
 	public LocalDateTime getModificationDat() {
-		return modificationDat;
+		return modificationDate;
 	}
 
 	public void setModificationDat(LocalDateTime modificationDat) {
-		this.modificationDat = modificationDat;
+		this.modificationDate = modificationDat;
 	}
 
 	public String getName() {
@@ -86,6 +87,25 @@ public class UserOpenFire {
 	@Override
 	public String toString() {
 		return "UserOpenFire [userName=" + userName + ", name=" + name + ", email=" + email + ", creationDate="
-				+ creationDate + ", modificationDat=" + modificationDat + "]";
+				+ creationDate + ", modificationDat=" + modificationDate + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(creationDate, email, modificationDate, name, password, userName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserOpenFire other = (UserOpenFire) obj;
+		return Objects.equals(creationDate, other.creationDate) && Objects.equals(email, other.email)
+				&& Objects.equals(modificationDate, other.modificationDate) && Objects.equals(name, other.name)
+				&& Objects.equals(password, other.password) && Objects.equals(userName, other.userName);
 	}
 }
