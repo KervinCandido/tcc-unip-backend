@@ -37,7 +37,7 @@ public class ErrorValidationHandler {
     
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(FormErrorException.class)
-    public FormErrorDTO handle(FormErrorException exception){
-        return new FormErrorDTO(exception.getField(), exception.getMessage());
+    public List<FormErrorDTO> handle(FormErrorException exception){
+        return List.of(new FormErrorDTO(exception.getField(), exception.getMessage()));
     }
 }
