@@ -9,4 +9,6 @@ import br.unip.cc.tcc.model.Profile;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 	
 	Optional<Profile> findByUserId(Long id);
+
+	Optional<Profile> findByUserUserOpenFireUserName(String userName);
 }

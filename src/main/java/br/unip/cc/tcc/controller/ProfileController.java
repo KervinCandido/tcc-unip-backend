@@ -36,6 +36,24 @@ public class ProfileController {
 		return ResponseEntity.notFound().build();
 	}
 	
+	@GetMapping("/user/id/{id}")
+	public ResponseEntity<ProfileDTO> getProfileByUserId(@PathVariable Long id) {
+		Optional<ProfileDTO> optionalProfile = profileService.findByUserId(id);
+		if (optionalProfile.isPresent()) {
+			return ResponseEntity.ok(optionalProfile.get());
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping("/user/userName/{userName}")
+	public ResponseEntity<ProfileDTO> getProfileByUserName(@PathVariable String userName) {
+		Optional<ProfileDTO> optionalProfile = profileService.findByUserName(userName);
+		if (optionalProfile.isPresent()) {
+			return ResponseEntity.ok(optionalProfile.get());
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
 	@PostMapping
 	public ResponseEntity<ProfileDTO> createProfile(@RequestBody @Valid ProfileForm profileForm, UriComponentsBuilder uriComponensts) {
 		ProfileDTO profileDTO = profileService.save(profileForm);

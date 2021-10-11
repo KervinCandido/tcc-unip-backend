@@ -39,4 +39,14 @@ public class ProfileService {
 		
 		return new ProfileDTO(createdProfile);
 	}
+
+	public Optional<ProfileDTO> findByUserId(Long id) {
+		Optional<Profile> profileOptional = profileRepository.findByUserId(id);
+		return profileOptional.map(ProfileDTO::new);
+	}
+
+	public Optional<ProfileDTO> findByUserName(String userName) {
+		Optional<Profile> profileOptional = profileRepository.findByUserUserOpenFireUserName(userName);
+		return profileOptional.map(ProfileDTO::new);
+	}
 }
