@@ -13,6 +13,10 @@ import org.springframework.security.core.GrantedAuthority;
 @Table(name = "permission")
 public class Permission implements GrantedAuthority {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3036496904460845222L;
 	public static final Permission ADMIN = new Permission(1L, "ADMIN");
 	public static final Permission USER = new Permission(2L, "USER");
 	

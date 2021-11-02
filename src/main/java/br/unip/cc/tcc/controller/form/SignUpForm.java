@@ -5,7 +5,6 @@ import java.util.List;
 
 import br.unip.cc.tcc.model.Permission;
 import br.unip.cc.tcc.model.User;
-import br.unip.cc.tcc.model.UserOpenFire;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -70,16 +69,13 @@ public class SignUpForm {
 
 	public User toUser() {
 		User user = new User();
-		UserOpenFire userOpenFire = new UserOpenFire();
 		LocalDateTime dataAtual = LocalDateTime.now();
 		
-		userOpenFire.setUserName(userName);
-		userOpenFire.setEmail(email);
-		userOpenFire.setName(name);
-		userOpenFire.setPassword(password);
-		userOpenFire.setCreationDate(dataAtual);
-		userOpenFire.setModificationDat(dataAtual);
-		user.setUserOpenFire(userOpenFire);
+		user.setUserName(userName);
+		user.setEmail(email);
+		user.setName(name);
+		user.setPassword(password);
+		user.setCreationDate(dataAtual);
 		user.setPermissions(List.of(Permission.USER));
 		
 		return user;

@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.unip.cc.tcc.model.Gender;
 import br.unip.cc.tcc.model.Profile;
@@ -31,7 +32,8 @@ public class ProfileForm {
 	@NotNull
 	@Pattern(regexp = "^MALE$|^FEMALE$", message = "Gênero inválido")
 	private String gender;
-	private String photo;
+	
+	private MultipartFile photo;
 	private String description;
 	
 	public ProfileForm () {}
@@ -68,11 +70,11 @@ public class ProfileForm {
 		this.gender = gender;
 	}
 
-	public String getPhoto() {
+	public MultipartFile  getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(String photo) {
+	public void setPhoto(MultipartFile  photo) {
 		this.photo = photo;
 	}
 
@@ -87,7 +89,7 @@ public class ProfileForm {
 	@Override
 	public String toString() {
 		return "ProfileForm [userId=" + userId + ", profileName=" + profileName + ", birthDate=" + birthDate
-				+ ", gender=" + gender + ", photo.size=" + photo.length() + ", description=" + description + "]";
+				+ ", gender=" + gender + ", " + "description=" + description + "]";
 	}
 	
 	public Profile toProfile() {
@@ -99,7 +101,6 @@ public class ProfileForm {
 		profile.setProfileName(profileName);
 		profile.setBirthDate(birthDate);
 		profile.setGender(Gender.valueOf(gender));
-		profile.setPhoto(photo);
 		profile.setDescription(description);
 		
 		return profile;

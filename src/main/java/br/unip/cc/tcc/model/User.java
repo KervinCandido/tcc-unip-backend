@@ -14,10 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,14 +25,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "user_tcc")
 public class User implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1144311867009784310L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Long id;
 	
-	@OneToOne
-	@JoinColumn(name = "username", nullable = false)
-	private UserOpenFire userOpenFire;
+	@Column(name = "username", nullable = false)
+	private String userName;
+	
+	@Column(name = "name", nullable = false)
+	private String name;
+	
+	@Column(name = "password")
+	private String password;
+	
+	@Column(name = "email")
+	private String email;
+	
+	@Column(name = "creation_date", nullable = false)
+	private LocalDateTime creationDate;
+
+	@Column(name = "modification_date", nullable = false)
+	private LocalDateTime modificationDate;
+	
+	@Column(name = "exclusion_date")
+	private LocalDateTime exclusionDate;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_permission", 
@@ -41,8 +62,11 @@ public class User implements UserDetails {
 		inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "permission_id"))
 	private List<Permission> permissions;
 	
-	@Column(name = "exclusion_date")
-	private LocalDateTime exclusionDate;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private List<Contact> contacts;
+	
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+	private Profile profile;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -51,12 +75,12 @@ public class User implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return userOpenFire.getPassword();
+		return this.password;
 	}
 
 	@Override
 	public String getUsername() {
-		return userOpenFire.getUserName();
+		return this.userName;
 	}
 
 	@Override
@@ -87,14 +111,6 @@ public class User implements UserDetails {
 		this.id = id;
 	}
 
-	public UserOpenFire getUserOpenFire() {
-		return userOpenFire;
-	}
-
-	public void setUserOpenFire(UserOpenFire userOpenFire) {
-		this.userOpenFire = userOpenFire;
-	}
-
 	public List<Permission> getPermissions() {
 		return permissions;
 	}
@@ -110,16 +126,70 @@ public class User implements UserDetails {
 	public void setExclusionDate(LocalDateTime exclusionDate) {
 		this.exclusionDate = exclusionDate;
 	}
+	
+	public Profile getProfile() {
+		return profile;
+	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", userOpenFire=" + userOpenFire + ", permissions=" + permissions + ", exclusionDate="
-				+ exclusionDate + "]";
+	public void setProfile(Profile profile) {
+		this.profile = profile;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public LocalDateTime getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(LocalDateTime creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public LocalDateTime getModificationDate() {
+		return modificationDate;
+	}
+
+	public void setModificationDate(LocalDateTime modificationDate) {
+		this.modificationDate = modificationDate;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public List<Contact> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(List<Contact> contacts) {
+		this.contacts = contacts;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(exclusionDate, id, permissions, userOpenFire);
+		return Objects.hash(creationDate, email, exclusionDate, id, modificationDate, name, password, userName);
 	}
 
 	@Override
@@ -131,7 +201,16 @@ public class User implements UserDetails {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(exclusionDate, other.exclusionDate) && Objects.equals(id, other.id)
-				&& Objects.equals(permissions, other.permissions) && Objects.equals(userOpenFire, other.userOpenFire);
+		return Objects.equals(creationDate, other.creationDate) && Objects.equals(email, other.email)
+				&& Objects.equals(exclusionDate, other.exclusionDate) && Objects.equals(id, other.id)
+				&& Objects.equals(modificationDate, other.modificationDate) && Objects.equals(name, other.name)
+				&& Objects.equals(password, other.password) && Objects.equals(userName, other.userName);
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", userName=" + userName + ", name=" + name + ", email=" + email + ", creationDate="
+				+ creationDate + ", modificationDate=" + modificationDate + ", exclusionDate=" + exclusionDate + "]";
+	}
+	
 }

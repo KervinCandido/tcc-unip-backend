@@ -49,6 +49,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.permitAll()
 			.antMatchers(HttpMethod.POST, "/auth")
 			.permitAll()
+			.antMatchers(HttpMethod.GET, "/profile/picture/**")
+			.permitAll()
 			.anyRequest()
 			.authenticated()
 			.and().csrf().disable()
@@ -64,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers("/**.html", 
-                             "/v2/api-docs", 
+                             "/v2/api-docs",
                              "/webjars/**", 
                              "/configuration/**", 
 							 "/swagger-resources/**",
