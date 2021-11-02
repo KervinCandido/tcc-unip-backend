@@ -1,5 +1,7 @@
 package br.unip.cc.tcc.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.unip.cc.tcc.controller.dto.ContactDTO;
-import br.unip.cc.tcc.controller.form.RequestAddContactForm;
+import br.unip.cc.tcc.controller.dto.RequestContactDTO;
+import br.unip.cc.tcc.controller.form.ConfirmationRequestContactForm;
+import br.unip.cc.tcc.controller.form.RejectRequestContactForm;
+import br.unip.cc.tcc.controller.form.RequestContactForm;
 import br.unip.cc.tcc.service.ContactService;
+import br.unip.cc.tcc.service.RequestContactService;
 
 @RestController
 @RequestMapping("/contact")
@@ -27,38 +33,45 @@ public class ContactController {
 
 	@Autowired
 	private ContactService contactService;
+	
+	@Autowired
+	private RequestContactService rcService;
 
 	@MessageMapping("/request")
-	public void request(@Payload RequestAddContactForm requestAddContact) {
-		System.out.println("REQUEST ADD CONTACT: "+ requestAddContact);
-		var contactOptional = contactService.findByUserName(requestAddContact.getFrom());
+	public void request(@Payload RequestContactForm requestAddContact) {
+		Optional<RequestContactDTO> optionalRequestContactDTO = rcService.save(requestAddContact);
 		
-		contactOptional.ifPresent(contact -> {
-			System.out.println("/user/" + requestAddContact.getTo() + "/contact/request/queue");
-			
+		optionalRequestContactDTO.ifPresent(rcDTO -> {
 			simpMessagingTemplate.convertAndSend(
 					"/user/" + requestAddContact.getTo() + "/contact/request/queue", 
-					contact);			
+					rcDTO);		
 		});
 	}
 
 	@MessageMapping("/confirmation")
-	public void confirmation(@Payload RequestAddContactForm confirmation) {
+	public void confirmation(@Payload ConfirmationRequestContactForm confirmation) {
 		contactService.addToContactList(confirmation);
 		var contactOptional = contactService.findByUserName(confirmation.getFrom());
 		
+		rcService.confirmation(confirmation);
+		
 		contactOptional.ifPresent(contact -> {
-			System.out.println("/user/" + confirmation.getTo() + "/contact/confirmation/queue");
-			
 			simpMessagingTemplate.convertAndSend(
-					"/user/" + confirmation.getTo() + "/contact/confirmation/queue", 
+					"/user/" + confirmation.getTo() + "/contact/confirmation/queue",
 					contact);			
 		});
 	}
 
 	@MessageMapping("/reject")
-	public void rejectRequest(@Payload RequestAddContactForm reject) {
-		System.out.println("reject: "+ reject);
+	public void rejectRequest(@Payload RejectRequestContactForm reject) {
+		var contactOptional = contactService.findByUserName(reject.getFrom());
+		rcService.reject(reject);
+		
+		contactOptional.ifPresent(contact -> {
+		simpMessagingTemplate.convertAndSend(
+				"/user/" + reject.getTo() + "/contact/reject/queue",
+				contact);
+		});
 	}
 
 	@GetMapping("/recommendations/{id}")

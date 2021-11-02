@@ -2,10 +2,18 @@ package br.unip.cc.tcc.controller.form;
 
 import java.util.Objects;
 
-public class RequestAddContactForm {
-	
+public class RejectRequestContactForm {
+	private Long requestId;
 	private String from;
 	private String to;
+	
+	public Long getRequestId() {
+		return requestId;
+	}
+	
+	public void setRequestId(Long requestId) {
+		this.requestId = requestId;
+	}
 	
 	public String getFrom() {
 		return from;
@@ -25,7 +33,7 @@ public class RequestAddContactForm {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(from, to);
+		return Objects.hash(from, requestId, to);
 	}
 
 	@Override
@@ -36,13 +44,14 @@ public class RequestAddContactForm {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RequestAddContactForm other = (RequestAddContactForm) obj;
-		return Objects.equals(from, other.from) && Objects.equals(to, other.to);
+		RejectRequestContactForm other = (RejectRequestContactForm) obj;
+		return Objects.equals(from, other.from) && Objects.equals(requestId, other.requestId)
+				&& Objects.equals(to, other.to);
 	}
 
 	@Override
 	public String toString() {
-		return "RequestAddContactForm [from=" + from + ", to=" + to + "]";
+		return "RejectRequestContactForm [requestId=" + requestId + ", from=" + from + ", to=" + to + "]";
 	}
 	
 }

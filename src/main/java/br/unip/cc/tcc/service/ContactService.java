@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.unip.cc.tcc.controller.dto.ContactDTO;
-import br.unip.cc.tcc.controller.form.RequestAddContactForm;
+import br.unip.cc.tcc.controller.form.ConfirmationRequestContactForm;
 import br.unip.cc.tcc.model.Contact;
 import br.unip.cc.tcc.model.Profile;
 import br.unip.cc.tcc.model.User;
@@ -31,7 +31,7 @@ public class ContactService {
 	private UserRepository userRepository;
 	
 	public Page<ContactDTO> findRecommendation(Long userId, Pageable pageable) {
-		var profiles = profileRepository.findByUserIdNot(userId, pageable);
+		var profiles = profileRepository.findNewContacts(userId, pageable);
 		return profiles.map(ContactDTO::new);
 	}
 	
@@ -41,7 +41,7 @@ public class ContactService {
 	}
 
 	@Transactional
-	public void addToContactList(RequestAddContactForm confirmation) {
+	public void addToContactList(ConfirmationRequestContactForm confirmation) {
 		Optional<User> optionalUserFrom = userRepository.findByUserName(confirmation.getFrom());
 		Optional<User> optionalUserTo = userRepository.findByUserName(confirmation.getTo());
 		
