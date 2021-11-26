@@ -1,5 +1,7 @@
 package br.unip.cc.tcc.service;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -7,10 +9,16 @@ import org.springframework.stereotype.Service;
 import br.unip.cc.tcc.config.validation.exception.FormErrorException;
 import br.unip.cc.tcc.controller.dto.ProfileDTO;
 import br.unip.cc.tcc.controller.form.ProfileForm;
+import br.unip.cc.tcc.model.MovieGenre;
+import br.unip.cc.tcc.model.MusicalGenre;
 import br.unip.cc.tcc.model.Profile;
+import br.unip.cc.tcc.repository.MovieGenreRepository;
+import br.unip.cc.tcc.repository.MusicalGenreRepository;
 import br.unip.cc.tcc.repository.ProfileRepository;
 import br.unip.cc.tcc.repository.UserRepository;
 import br.unip.cc.tcc.service.storage.FileSystemStorageService;
+import br.unip.cc.tcc.controller.dto.FavoriteMovieGenreDTO;
+import br.unip.cc.tcc.controller.dto.FavoriteMusicalGenreDTO;
 
 @Service
 public class ProfileService {
@@ -22,6 +30,12 @@ public class ProfileService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private MusicalGenreRepository musicalRepository;
+	
+	@Autowired
+	private MovieGenreRepository movieRepository;
 	
 	@Autowired
 	private FileSystemStorageService storageService;
@@ -52,6 +66,17 @@ public class ProfileService {
 				profile.setPhoto(prof.getPhoto());
 			}
 		});
+		
+		Arrays.asList(profileForm.getFavoriteMusicalGenre()).stream().forEach(musicGenreId -> {
+			Optional<MusicalGenre> optional = musicalRepository.findById(musicGenreId);
+			optional.ifPresent(profile::addFavoriteMusicGenre);
+		});
+		
+		Arrays.asList(profileForm.getFavoriteMovieGenre()).stream().forEach(movieGenreId -> {
+			Optional<MovieGenre> optional = movieRepository.findById(movieGenreId);
+			optional.ifPresent(profile::addFavoriteMovieGenre);
+		});
+		
 		Profile createdProfile = profileRepository.save(profile);
 		
 		return new ProfileDTO(createdProfile);
@@ -73,5 +98,14 @@ public class ProfileService {
 
 	public Optional<Resource> getProfilePicture(Long userId) {
 		return Optional.of(storageService.loadAsResource(PICTURE, getPhotoProfilePath(userId)));
+	}
+	
+
+	public List<FavoriteMusicalGenreDTO> getMusicalGenre() {
+		return musicalRepository.findAll().stream().map(FavoriteMusicalGenreDTO::new).toList();
+	}
+	
+	public List<FavoriteMovieGenreDTO> getMovieGenre() {
+		return movieRepository.findAll().stream().map(FavoriteMovieGenreDTO::new).toList();
 	}
 }

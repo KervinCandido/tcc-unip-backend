@@ -80,6 +80,12 @@ public class ContactController {
 		return contactService.findRecommendation(userId, pageable);
 	}
 	
+	@GetMapping("/requested/{id}")
+	public Page<RequestContactDTO> requests(@PathVariable("id") Long userId,
+			@PageableDefault(page = 0, size = 20, direction = Direction.DESC) Pageable pageable) {
+		return rcService.findRequests(userId, pageable);
+	}
+	
 	@GetMapping("/{id}")
 	public Page<ContactDTO> getContacts(@PathVariable("id") Long userId,
 			@PageableDefault(page = 0, size = 20, direction = Direction.DESC) Pageable pageable) {

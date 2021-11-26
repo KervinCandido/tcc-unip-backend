@@ -3,6 +3,8 @@ package br.unip.cc.tcc.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.unip.cc.tcc.controller.dto.RequestContactDTO;
@@ -52,5 +54,9 @@ public class RequestContactService {
 			rc.setStatus(status);
 			rcRepository.saveAndFlush(rc);
 		});
+	}
+
+	public Page<RequestContactDTO> findRequests(Long userId, Pageable pageable) {
+		return rcRepository.findByRequestedIdAndStatus(userId, RequestContact.Status.PENDENTE, pageable);
 	}
 }

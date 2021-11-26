@@ -1,9 +1,12 @@
 package br.unip.cc.tcc.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,7 +16,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -47,6 +52,18 @@ public class Profile {
 	@Lob @Basic(fetch = FetchType.LAZY)
 	@Column(name = "description")
 	private String description;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinTable(name = "profile_musical_genre", 
+		joinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "profile_id"), 
+		inverseJoinColumns = @JoinColumn(name = "musical_genre_id", referencedColumnName = "musical_genre_id"))
+	private List<MusicalGenre> favoriteMusicGenre;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinTable(name = "profile_movie_genre", 
+		joinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "profile_id"), 
+		inverseJoinColumns = @JoinColumn(name = "movie_genre_id", referencedColumnName = "movie_genre_id"))
+	private List<MovieGenre> favoriteMovieGenre;
 	
 	public Profile() {}
 
@@ -106,6 +123,38 @@ public class Profile {
 		this.description = description;
 	}
 
+	public List<MusicalGenre> getFavoriteMusicGenre() {
+		return favoriteMusicGenre != null ? new ArrayList<>(favoriteMusicGenre) : new ArrayList<>();
+	}
+
+	public void addFavoriteMusicGenre(MusicalGenre musicalGenre) {
+		if (musicalGenre == null) return;
+		if (favoriteMusicGenre == null) {
+			favoriteMusicGenre = new ArrayList<>();
+		}
+		favoriteMusicGenre.add(musicalGenre);
+	}
+	
+	public void setFavoriteMusicGenre(List<MusicalGenre> favoriteMusicGenre) {
+		this.favoriteMusicGenre = favoriteMusicGenre;
+	}
+
+	public List<MovieGenre> getFavoriteMovieGenre() {
+		return favoriteMovieGenre != null ? new ArrayList<>(favoriteMovieGenre) : new ArrayList<>();
+	}
+	
+	public void addFavoriteMovieGenre(MovieGenre movieGenre) {
+		if (movieGenre == null) return;
+		if (favoriteMovieGenre == null) {
+			favoriteMovieGenre = new ArrayList<>();
+		}
+		favoriteMovieGenre.add(movieGenre);
+	}
+	
+	public void setFavoriteMovieGenre(List<MovieGenre> favoriteMovieGenre) {
+		this.favoriteMovieGenre = favoriteMovieGenre;
+	}
+
 	@Override
 	public String toString() {
 		return "Profile [user=" + user + ", profileName=" + profileName + ", birthDate=" + birthDate + ", gender="
@@ -129,5 +178,13 @@ public class Profile {
 		return Objects.equals(birthDate, other.birthDate) && Objects.equals(description, other.description)
 				&& gender == other.gender && Objects.equals(id, other.id) && Objects.equals(photo, other.photo)
 				&& Objects.equals(profileName, other.profileName) && Objects.equals(user, other.user);
+	}
+
+	public void clearFavoriteMusicalGenre() {
+		this.favoriteMusicGenre.clear();
+	}
+	
+	public void clearFavoriteMovieGenre() {
+		this.favoriteMovieGenre.clear();
 	}
 }

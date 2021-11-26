@@ -1,6 +1,7 @@
 package br.unip.cc.tcc.controller.dto;
 
 import br.unip.cc.tcc.model.Profile;
+import br.unip.cc.tcc.model.RecommendedUser;
 
 public record ContactDTO (
 		String userName, 
@@ -11,4 +12,7 @@ public record ContactDTO (
 		this(profile.getUser().getUsername(), profile.getPhoto(), profile.getProfileName());
 	}
 	
+	public ContactDTO(RecommendedUser recommendedUser) {
+		this(recommendedUser.getUserName(), recommendedUser.getPhoto(), recommendedUser.getProfileName());
+	}
 }

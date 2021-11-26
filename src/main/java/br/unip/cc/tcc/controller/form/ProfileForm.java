@@ -1,6 +1,8 @@
 package br.unip.cc.tcc.controller.form;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -35,6 +37,9 @@ public class ProfileForm {
 	
 	private MultipartFile photo;
 	private String description;
+	
+	private Long[] favoriteMusicalGenre;
+	private Long[] favoriteMovieGenre;
 	
 	public ProfileForm () {}
 
@@ -84,6 +89,22 @@ public class ProfileForm {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public Long[] getFavoriteMusicalGenre() {
+		return favoriteMusicalGenre;
+	}
+
+	public void setFavoriteMusicalGenre(Long[] favoriteMusicalGenre) {
+		this.favoriteMusicalGenre = favoriteMusicalGenre;
+	}
+
+	public Long[] getFavoriteMovieGenre() {
+		return favoriteMovieGenre;
+	}
+
+	public void setFavoriteMovieGenre(Long[] favoriteMovieGenre) {
+		this.favoriteMovieGenre = favoriteMovieGenre;
 	}
 
 	@Override

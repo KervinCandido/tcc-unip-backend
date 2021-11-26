@@ -1,6 +1,7 @@
 package br.unip.cc.tcc.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.unip.cc.tcc.controller.dto.FavoriteMovieGenreDTO;
+import br.unip.cc.tcc.controller.dto.FavoriteMusicalGenreDTO;
 import br.unip.cc.tcc.controller.dto.ProfileDTO;
 import br.unip.cc.tcc.controller.form.ProfileForm;
 import br.unip.cc.tcc.service.ProfileService;
@@ -37,6 +40,16 @@ public class ProfileController {
 			return ResponseEntity.ok(optionalProfile.get());
 		}
 		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping("/musicalGenrer")
+	public ResponseEntity<List<FavoriteMusicalGenreDTO>> getMusicalGenrer() {
+		return ResponseEntity.ok(profileService.getMusicalGenre());
+	}
+	
+	@GetMapping("/movieGenrer")
+	public ResponseEntity<List<FavoriteMovieGenreDTO>> getMovieGenrer() {
+		return ResponseEntity.ok(profileService.getMovieGenre());
 	}
 	
 	@GetMapping("/picture/{id}")

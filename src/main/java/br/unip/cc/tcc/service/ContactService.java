@@ -13,9 +13,11 @@ import br.unip.cc.tcc.controller.dto.ContactDTO;
 import br.unip.cc.tcc.controller.form.ConfirmationRequestContactForm;
 import br.unip.cc.tcc.model.Contact;
 import br.unip.cc.tcc.model.Profile;
+import br.unip.cc.tcc.model.RecommendedUser;
 import br.unip.cc.tcc.model.User;
 import br.unip.cc.tcc.repository.ContactRepository;
 import br.unip.cc.tcc.repository.ProfileRepository;
+import br.unip.cc.tcc.repository.RecommendedUserRepository;
 import br.unip.cc.tcc.repository.UserRepository;
 
 @Service
@@ -30,9 +32,12 @@ public class ContactService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private RecommendedUserRepository recommendedUser;
+	
 	public Page<ContactDTO> findRecommendation(Long userId, Pageable pageable) {
-		var profiles = profileRepository.findNewContacts(userId, pageable);
-		return profiles.map(ContactDTO::new);
+		Page<RecommendedUser> recommendedUsers = recommendedUser.findByUserId(userId, pageable);
+		return recommendedUsers.map(ContactDTO::new);
 	}
 	
 	public Optional<ContactDTO> findByUserName(String userName) {
