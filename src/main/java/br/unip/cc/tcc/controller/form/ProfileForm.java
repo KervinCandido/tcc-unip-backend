@@ -1,8 +1,6 @@
 package br.unip.cc.tcc.controller.form;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -92,7 +90,7 @@ public class ProfileForm {
 	}
 	
 	public Long[] getFavoriteMusicalGenre() {
-		return favoriteMusicalGenre;
+		return favoriteMusicalGenre != null ? favoriteMusicalGenre : new Long[0];
 	}
 
 	public void setFavoriteMusicalGenre(Long[] favoriteMusicalGenre) {
@@ -100,7 +98,7 @@ public class ProfileForm {
 	}
 
 	public Long[] getFavoriteMovieGenre() {
-		return favoriteMovieGenre;
+		return favoriteMovieGenre != null ? favoriteMovieGenre : new Long[0];
 	}
 
 	public void setFavoriteMovieGenre(Long[] favoriteMovieGenre) {
